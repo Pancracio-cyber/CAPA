@@ -45,7 +45,7 @@ class SolicitudController extends Controller
         {
             $respuesta=$validacion->messages()->get('*');
             return response()->json([
-                'wsp_mensaje'=>'Campos faltantes',
+                'wsp_mensaje'=>'Solicitud invalida',
                 'wsp_campos_faltantes'=>$respuesta
             ],400);
         }
