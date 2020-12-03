@@ -44,6 +44,7 @@ class SolicitudController extends Controller
         //Validación de datos
         if($validacion->fails())
         {
+            //Creación de la variable respuesta
             $respuesta=$validacion->messages()->get('*');
             return response()->json([
                 'wsp_mensaje'=>'Solicitud invalida',
