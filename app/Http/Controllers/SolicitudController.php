@@ -41,6 +41,7 @@ class SolicitudController extends Controller
             'ews_no_contrato' => 'required',
             'ews_id_municipio' => 'required',
         ]);
+        //Validación de datos
         if($validacion->fails())
         {
             $respuesta=$validacion->messages()->get('*');
