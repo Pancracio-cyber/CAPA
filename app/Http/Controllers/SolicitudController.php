@@ -106,7 +106,7 @@ class SolicitudController extends Controller
         '' => '',*/
 
         $solicitud->save();
-
+        //Repuesta en formato json
         return response()->json([
             'wsp_mensaje' => 'Datos del contrato encontrados exitosamente',
             'wsp_no_solicitud' => '2020-0000000001',
