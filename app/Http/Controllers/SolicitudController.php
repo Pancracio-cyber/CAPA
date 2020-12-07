@@ -41,7 +41,7 @@ class SolicitudController extends Controller
             'ews_no_contrato' => 'required',
             'ews_id_municipio' => 'required',
         ]);
-        //Validación de datos
+        //Validación de datos campos vacios
         if($validacion->fails())
         {
             //Creación de la variable respuesta
@@ -51,11 +51,13 @@ class SolicitudController extends Controller
                 'wsp_campos_faltantes'=>$respuesta
             ],400);
         }
-        /*$token = new Token();
-        $token->token = $request->ews_token;*/
+        //Variables proporcionadas por URL con metofo GET
+        $direccion= Http::get('URL')[''];
+        //Creación de la varible no_solicutd_api para que sea auto incrementable 
         $no_solicitud_api = Solicitud::count();
+        //Creación de una nueva solicitud
         $solicitud = new Solicitud();
-        /*$solicitud-> = $request->ews_;*/
+
         /*Los datos fijos pertenecen a API-2 y API-3*/
         $solicitud->id_tramite = $request->ews_id_tramite;
         $solicitud->llave = $request->ews_llave;
@@ -64,16 +66,13 @@ class SolicitudController extends Controller
         $solicitud->hora_solicitud = $request->ews_hora_solicitud;
         /*$config=['table'=>'solicitudes','length'=>15,'prefix'=>date("Y")];*/
         /*IdGenerator::generate($config) + Solicitudes::count()*/
-        /*$solicitud->no_solicitud_api = '1';*/
         $solicitud->no_solicitud_api = $no_solicitud_api;
         $solicitud->fecha_solicitud_api = date("Y-m-d");
         $solicitud->hora_solicitud_api = date("H:i:s", time());
         /*$solicitud->referencia_pago = '9300-0000-9281-82';*/
         $solicitud->id_estado = '1';
-        /*$solicitud->id_electronico = 'jhey38slwi';*/
-        /*$solicitud->fecha_pago = $request->time('void')(2020-02-23);*/
-        /*$solicitud->fecha_pago = date("2020-02-23");
-        $solicitud->hora_pago = date("H:i:s", time());*/
+        //$solicitud->id_electronico = 'jhey38slwi';
+    
         $solicitud->curp = $request->ews_curp;
         $solicitud->nombre = $request->ews_nombre;
         $solicitud->apellido_paterno = $request->ews_apellido_paterno;
@@ -102,9 +101,8 @@ class SolicitudController extends Controller
         $solicitud->stripe_digitos = '8001';
         $solicitud->stripe_red = "visa";
         $solicitud->stripe_estado = "succeeded";
-        $solicitud->xml_url = "localhost";
-        '' => '',*/
-
+        $solicitud->xml_url = "localhost";*/
+        //Se almacena la slicitud
         $solicitud->save();
         //Repuesta en formato json
         return response()->json([
