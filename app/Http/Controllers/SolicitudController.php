@@ -51,13 +51,19 @@ class SolicitudController extends Controller
                 'wsp_campos_faltantes'=>$respuesta
             ],400);
         }
+        //Validación del ID 
+        if($request->ews_id_tramite!=17)
+        {
+            return response()->json([
+                'wsp_mensaje'=>'Id incorrecto'
+            ],400);
+        }
         //Variables proporcionadas por URL con metofo GET
-        $direccion= Http::get('URL')[''];
+        //$direccion= Http::get('URL')[''];
         //Creación de la varible no_solicutd_api para que sea auto incrementable 
         $no_solicitud_api = Solicitud::count();
         //Creación de una nueva solicitud
         $solicitud = new Solicitud();
-
         /*Los datos fijos pertenecen a API-2 y API-3*/
         $solicitud->id_tramite = $request->ews_id_tramite;
         $solicitud->llave = $request->ews_llave;
