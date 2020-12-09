@@ -26,8 +26,7 @@ class SolicitudController extends Controller
      */
     public function store(Request $request)
     {
-        //Validación de campos vacios
-        $validacion=Validator::make($request->all(),
+        /*$validacion=Validator::make($request->all(),
         [
             'ews_llave' => 'required',
             'ews_id_tramite' => 'required',
@@ -40,9 +39,45 @@ class SolicitudController extends Controller
             'ews_apellido_materno' => 'required',
             'ews_no_contrato' => 'required',
             'ews_id_municipio' => 'required',
-        ]);
+        ]);*/
         //Validación de datos campos vacios
-        if($validacion->fails())
+        if(empty($request->ews_curp))
+        {
+            return response()->json([
+                'wsp_mensaje'=>'Complete el campo CURP'
+            ],400);
+        }
+        if(empty($request->ews_nombre))
+        {
+            return response()->json([
+                'wsp_mensaje'=>'Complete el campo Nombre'
+            ],400);
+        }
+        if(empty($request->ews_apellido_paterno))
+        {
+            return response()->json([
+                'wsp_mensaje'=>'Complete el campo Apellido Paterno'
+            ],400);
+        }
+        if(empty($request->ews_apellido_materno))
+        {
+            return response()->json([
+                'wsp_mensaje'=>'Complete el campo Apellido Materno'
+            ],400);
+        }
+        if(empty($request->ews_no_contrato))
+        {
+            return response()->json([
+                'wsp_mensaje'=>'Complete el campo número de contrato'
+            ],400);
+        }
+        if(empty($request->ews_id_municipio))
+        {
+            return response()->json([
+                'wsp_mensaje'=>'Complete el campo número de municipio'
+            ],400);
+        }
+        /*if($validacion->fails())
         {
             //Creación de la variable respuesta
             $respuesta=$validacion->messages()->get('*');
@@ -50,12 +85,12 @@ class SolicitudController extends Controller
                 'wsp_mensaje'=>'Solicitud invalida',
                 'wsp_campos_faltantes'=>$respuesta
             ],400);
-        }
+        }*/
         //Validación del ID 
         if($request->ews_id_tramite!=17)
         {
             return response()->json([
-                'wsp_mensaje'=>'Id incorrecto'
+                'wsp_mensaje'=>'El número del trámite no coincide'
             ],400);
         }
         //Variables proporcionadas por URL con metofo GET
