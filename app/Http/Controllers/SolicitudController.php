@@ -38,7 +38,7 @@ class SolicitudController extends Controller
             'ews_apellido_paterno' => 'required',
             'ews_apellido_materno' => 'required',
             'ews_no_contrato' => 'required',
-            'ews_id_municipio' => 'required',
+            'ews_municipio_capa' => 'required',
         ]);*/
         //Validación de datos campos vacios
         if(empty($request->ews_curp))
@@ -71,7 +71,7 @@ class SolicitudController extends Controller
                 'wsp_mensaje'=>'Complete el campo número de contrato'
             ],400);
         }
-        if(empty($request->ews_id_municipio))
+        if(empty($request->ews_municipio_capa))
         {
             return response()->json([
                 'wsp_mensaje'=>'Complete el campo número de municipio'
@@ -119,7 +119,7 @@ class SolicitudController extends Controller
         $solicitud->apellido_paterno = $request->ews_apellido_paterno;
         $solicitud->apellido_materno = $request->ews_apellido_materno;
         $solicitud->no_contrato = $request->ews_no_contrato;
-        $solicitud->id_municipio = $request->ews_id_municipio;
+        $solicitud->id_municipio = $request->ews_municipio_capa;
         
         /*Consumir API de usuarios de POTYS para validar los datos del solicitante con el usuario registrdo en POTYS*/
         /*Consumir API-5 de repositorio de POTYS para conocer si el solicitante ya integro los documentos requisito*/
@@ -167,7 +167,7 @@ class SolicitudController extends Controller
                     '2' => (Object)
                     [
                         '0' => 'Municipio',
-                        '1' => $request->ews_id_municipio
+                        '1' => $request->ews_municipio_capa
                     ],
                     '3' => (Object)
                     [
