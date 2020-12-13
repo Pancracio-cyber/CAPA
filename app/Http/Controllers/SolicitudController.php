@@ -94,7 +94,7 @@ class SolicitudController extends Controller
             ],400);
         }
         //Variables proporcionadas por URL con metofo GET
-        //$direccion= Http::get('URL')[''];
+        //$direccion= Http::post('http://www.capa.gob.mx/capanet/apiroo.php?ews_token=***wsjus2020dki34***......&ews_no_contrato=3204&ews_id_municipio=5')[''];
         //Creación de la varible no_solicutd_api para que sea auto incrementable 
         $no_solicitud_api = Solicitud::count();
         //Creación de una nueva solicitud

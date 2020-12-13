@@ -20,6 +20,7 @@ Route::middleware('auth:api')->post('/user', function (Request $request) {
 Route::group(["middleware" => "apikey.validate"], function () {
     Route::post('/solicitudes','SolicitudController@store');
 });
+Route::get('/pdf','PDFController@PDF')->name('PDF');
 
 Route::post('/ciudadanos','CiudanoController@store');
 
