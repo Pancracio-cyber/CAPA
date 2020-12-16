@@ -21,6 +21,7 @@ class CreateSolicitudesTable extends Migration
             $table->date('fecha_solicitud')->nullable();
             $table->time('hora_solicitud')->nullable();
             $table->decimal('no_solicitud_api');
+            $table->time('hora_solicitud_api')->nullable();
             $table->date('fecha_solicitud_api')->nullable();
             $table->string('id_estado')->nullable();
             $table->string('id_electronico')->nullable();
@@ -32,7 +33,7 @@ class CreateSolicitudesTable extends Migration
             $table->string('apellido_paterno')->nullable();
             $table->string('apellido_materno')->nullable();
             $table->string('direccion')->nullable();
-            $table->string('colinia')->nullable();
+            $table->string('colonia')->nullable();
             $table->string('importe')->nullable();
             $table->date('fechalimite')->nullable();
             $table->string('sector')->nullable();
