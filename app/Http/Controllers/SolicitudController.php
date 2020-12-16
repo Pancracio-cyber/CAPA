@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Solicitud;
 use Illuminate\Support\Facades\Validator;
+use Http;
 
 class SolicitudController extends Controller
 {
@@ -94,7 +95,7 @@ class SolicitudController extends Controller
             ],400);
         }
         //Variables proporcionadas por URL con metofo GET
-        //$direccion= Http::post('http://www.capa.gob.mx/capanet/apiroo.php?ews_token=***wsjus2020dki34***......&ews_no_contrato=3204&ews_id_municipio=5')[''];
+        $Datos= Http::get('https://apis.roo.gob.mx/repositorio/api_requisitoslandingpage.php?ews_curp=DOFJ000419HYNMRSA3&ews_token=UA6H5auaxtDo$xcIMz3aYvpntoeCJC7GQ8abH6cUWYS7tvczbBTY0feM7J4C2Shvlq8bBCJC7GQ8abH6cUWYS7tvczbBTY0feM7J4C2Shvlq8bBcNNbYk5YQycBnx_BJXqADLz2Nk0xEWUZzZNMKK4*d&ews_nid_tramite=115852&=')['wsp_acreditado'];
         //Creación de la varible no_solicutd_api para que sea auto incrementable 
         $no_solicitud_api = Solicitud::count();
         //Creación de una nueva solicitud
