@@ -50,8 +50,8 @@ class CreateSolicitudesTable extends Migration
             $table->string('stripe_estado')->nullable();
             $table->string('xml_url')->nullable();
             $table->string('no_consulta')->nullable();
-            $table->decimal('no_contrato')->nullable();
-            $table->decimal('id_municipio')->nullable();
+            $table->integer('no_contrato')->nullable();
+            $table->integer('id_municipio')->nullable();
             $table->string('id_firmante')->nullable();
             $table->string('id_sello')->nullable();
             $table->timestamps();

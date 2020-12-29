@@ -42,25 +42,25 @@ class SolicitudController extends Controller
             'ews_municipio_capa' => 'required',
         ]);*/
         //Validación de datos campos vacios
-        if(empty($request->ews_curp))
+        if(empty($request->ews_curp_sw))
         {
             return response()->json([
                 'wsp_mensaje'=>'Complete el campo CURP'
             ],400);
         }
-        if(empty($request->ews_nombre))
+        if(empty($request->ews_nombre_sw))
         {
             return response()->json([
                 'wsp_mensaje'=>'Complete el campo Nombre'
             ],400);
         }
-        if(empty($request->ews_apellido_paterno))
+        if(empty($request->ews_apellido_paterno_sw))
         {
             return response()->json([
                 'wsp_mensaje'=>'Complete el campo Apellido Paterno'
             ],400);
         }
-        if(empty($request->ews_apellido_materno))
+        if(empty($request->ews_apellido_materno_sw))
         {
             return response()->json([
                 'wsp_mensaje'=>'Complete el campo Apellido Materno'
@@ -94,8 +94,27 @@ class SolicitudController extends Controller
                 'wsp_mensaje'=>'El número del trámite no coincide'
             ],400);
         }
-        //Variables proporcionadas por URL con metofo GET
-        $Datos= Http::get('https://apis.roo.gob.mx/repositorio/api_requisitoslandingpage.php?ews_curp=DOFJ000419HYNMRSA3&ews_token=UA6H5auaxtDo$xcIMz3aYvpntoeCJC7GQ8abH6cUWYS7tvczbBTY0feM7J4C2Shvlq8bBCJC7GQ8abH6cUWYS7tvczbBTY0feM7J4C2Shvlq8bBcNNbYk5YQycBnx_BJXqADLz2Nk0xEWUZzZNMKK4*d&ews_nid_tramite=115852&=')['wsp_acreditado'];
+        //Variables proporcionadas por URL con metofo GET API5
+        $Datos= Http::get('https://apis.roo.gob.mx/repositorio/api_requisitoslandingpage.php?ews_curp='.$request->ews_curp_sw.'&ews_token=UA6H5auaxtDo$xcIMz3aYvpntoeCJC7GQ8abH6cUWYS7tvczbBTY0feM7J4C2Shvlq8bBCJC7GQ8abH6cUWYS7tvczbBTY0feM7J4C2Shvlq8bBcNNbYk5YQycBnx_BJXqADLz2Nk0xEWUZzZNMKK4*d&ews_nid_tramite=115856&=')['wsp_acreditado'];
+        //Validación de documentos rquisitos completos
+        if(!$Datos)
+        {
+            return response()->json([            
+                'wsp_mensaje' =>'Complete sus datos requisito'
+            ],400);
+        }
+        //Variables proporcionadas por URL con metofo GETAPI4
+        /*$NumExterior= Http::get('https://apis.roo.gob.mx/repositorio/detalledatosdocumento.php?ews_id_documento=116090&ews_codigo=0009&ews_curp='.$request->ews_curp.'&ews_token=02e74f10e0327ad868d138f2b4fdd6f090eb8d5ef4ebbd9d00cdd93f40aee8a95092ce6456740f6d39a6ee78d557358de069ea4c9c233d36ff9c7f329bc08ff1dba132f6ab6a3e3d17a8d59e82105f4c')['wsp_numero_exterior'];
+        if($NumExterior)
+        {
+
+        }
+        $NumInterior= Http::get('https://apis.roo.gob.mx/repositorio/detalledatosdocumento.php?ews_id_documento=116090&ews_codigo=0009&ews_curp='.$request->ews_curp.'&ews_token=02e74f10e0327ad868d138f2b4fdd6f090eb8d5ef4ebbd9d00cdd93f40aee8a95092ce6456740f6d39a6ee78d557358de069ea4c9c233d36ff9c7f329bc08ff1dba132f6ab6a3e3d17a8d59e82105f4c')['wsp_numero_interior'];
+        $Manzana= Http::get('https://apis.roo.gob.mx/repositorio/detalledatosdocumento.php?ews_id_documento=116090&ews_codigo=0009&ews_curp='.$request->ews_curp.'&ews_token=02e74f10e0327ad868d138f2b4fdd6f090eb8d5ef4ebbd9d00cdd93f40aee8a95092ce6456740f6d39a6ee78d557358de069ea4c9c233d36ff9c7f329bc08ff1dba132f6ab6a3e3d17a8d59e82105f4c')['wsp_manzana'];
+        $Lote= Http::get('https://apis.roo.gob.mx/repositorio/detalledatosdocumento.php?ews_id_documento=116090&ews_codigo=0009&ews_curp='.$request->ews_curp.'&ews_token=02e74f10e0327ad868d138f2b4fdd6f090eb8d5ef4ebbd9d00cdd93f40aee8a95092ce6456740f6d39a6ee78d557358de069ea4c9c233d36ff9c7f329bc08ff1dba132f6ab6a3e3d17a8d59e82105f4c')['wsp_lote'];
+        $Localidad= Http::get('https://apis.roo.gob.mx/repositorio/detalledatosdocumento.php?ews_id_documento=116090&ews_codigo=0009&ews_curp='.$request->ews_curp.'&ews_token=02e74f10e0327ad868d138f2b4fdd6f090eb8d5ef4ebbd9d00cdd93f40aee8a95092ce6456740f6d39a6ee78d557358de069ea4c9c233d36ff9c7f329bc08ff1dba132f6ab6a3e3d17a8d59e82105f4c')['wsp_localidad'];
+        $Direccion = 'Número Exterior: '.$NumExterior.' Número Interior: '.$NumInterior.' Manzana: '.$Manzana.' Lote: '.$Lote.' Localidad: '.$Localidad;
+        $Colonia = Http::get('https://apis.roo.gob.mx/repositorio/detalledatosdocumento.php?ews_id_documento=116090&ews_codigo=0009&ews_curp='.$request->ews_curp.'&ews_token=02e74f10e0327ad868d138f2b4fdd6f090eb8d5ef4ebbd9d00cdd93f40aee8a95092ce6456740f6d39a6ee78d557358de069ea4c9c233d36ff9c7f329bc08ff1dba132f6ab6a3e3d17a8d59e82105f4c')['wsp_colonia'];*/
         //Creación de la varible no_solicutd_api para que sea auto incrementable 
         $no_solicitud_api = Solicitud::count();
         //Creación de una nueva solicitud
@@ -115,10 +134,10 @@ class SolicitudController extends Controller
         $solicitud->id_estado = '1';
         //$solicitud->id_electronico = 'jhey38slwi';
     
-        $solicitud->curp = $request->ews_curp;
-        $solicitud->nombre = $request->ews_nombre;
-        $solicitud->apellido_paterno = $request->ews_apellido_paterno;
-        $solicitud->apellido_materno = $request->ews_apellido_materno;
+        $solicitud->curp = $request->ews_curp_sw;
+        $solicitud->nombre = $request->ews_nombre_sw;
+        $solicitud->apellido_paterno = $request->ews_apellido_paterno_sw;
+        $solicitud->apellido_materno = $request->ews_apellido_materno_sw;
         $solicitud->no_contrato = $request->ews_no_contrato;
         $solicitud->id_municipio = $request->ews_municipio_capa;
         
@@ -173,12 +192,12 @@ class SolicitudController extends Controller
                     '3' => (Object)
                     [
                         '0' => 'Dirección',
-                        '1' => ''
+                        '1' => '$Direccion'
                     ],
                     '4' => (Object)
                     [
                         '0' => 'Colonia',
-                        '1' => ''
+                        '1' => '$Colonia'
                     ],
                     '5' => (Object)
                     [
@@ -206,22 +225,22 @@ class SolicitudController extends Controller
                     '1' => (Object)
                     [
                         '0' => 'CURP',
-                        '1' => $request->ews_curp
+                        '1' => $request->ews_curp_sw
                     ],
                     '2' => (Object)
                     [
                         '0' => 'Nombre (s)',
-                        '1' => $request->ews_nombre
+                        '1' => $request->ews_nombre_sw
                     ],
                     '3' => (Object)
                     [
                         '0' => 'Apellido peterno',
-                        '1' => $request->ews_apellido_paterno
+                        '1' => $request->ews_apellido_paterno_sw
                     ],
                     '4' => (Object)
                     [
                         '0' => 'Apellido Materno',
-                        '1' => $request->ews_apellido_materno
+                        '1' => $request->ews_apellido_materno_sw
                     ]
                 ]
         ], 200);
