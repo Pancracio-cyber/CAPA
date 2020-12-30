@@ -31,7 +31,7 @@ class SolicitudRequest extends FormRequest
             'ews_no_contrato'=>'required',
             'ews_municipio_capa'=>'required',
             'ews_id_tramite'=>function ($attribute, $value, $fail) {
-                if ($value != 17) {
+                if ($value != 115856) {
                     $fail('El número del trámite no coincide');
                 }
             }
