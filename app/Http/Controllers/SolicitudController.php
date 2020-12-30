@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\SolicitudRequest;
 use Illuminate\Http\Request;
 use App\Solicitud;
 use Illuminate\Support\Facades\Validator;
@@ -25,75 +26,8 @@ class SolicitudController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(SolicitudRequest $request)
     {
-        /*$validacion=Validator::make($request->all(),
-        [
-            'ews_llave' => 'required',
-            'ews_id_tramite' => 'required',
-            'ews_no_solicitud' => 'required',
-            'ews_fecha_solicitud' => 'required',
-            'ews_hora_solicitud' => 'required',
-            'ews_curp' => 'required',
-            'ews_nombre' => 'required',
-            'ews_apellido_paterno' => 'required',
-            'ews_apellido_materno' => 'required',
-            'ews_no_contrato' => 'required',
-            'ews_municipio_capa' => 'required',
-        ]);*/
-        //Validación de datos campos vacios
-        if(empty($request->ews_curp_sw))
-        {
-            return response()->json([
-                'wsp_mensaje'=>'Complete el campo CURP'
-            ],400);
-        }
-        if(empty($request->ews_nombre_sw))
-        {
-            return response()->json([
-                'wsp_mensaje'=>'Complete el campo Nombre'
-            ],400);
-        }
-        if(empty($request->ews_apellido_paterno_sw))
-        {
-            return response()->json([
-                'wsp_mensaje'=>'Complete el campo Apellido Paterno'
-            ],400);
-        }
-        if(empty($request->ews_apellido_materno_sw))
-        {
-            return response()->json([
-                'wsp_mensaje'=>'Complete el campo Apellido Materno'
-            ],400);
-        }
-        if(empty($request->ews_no_contrato))
-        {
-            return response()->json([
-                'wsp_mensaje'=>'Complete el campo número de contrato'
-            ],400);
-        }
-        if(empty($request->ews_municipio_capa))
-        {
-            return response()->json([
-                'wsp_mensaje'=>'Complete el campo número de municipio'
-            ],400);
-        }
-        /*if($validacion->fails())
-        {
-            //Creación de la variable respuesta
-            $respuesta=$validacion->messages()->get('*');
-            return response()->json([
-                'wsp_mensaje'=>'Solicitud invalida',
-                'wsp_campos_faltantes'=>$respuesta
-            ],400);
-        }*/
-        //Validación del ID 
-        if($request->ews_id_tramite!=17)
-        {
-            return response()->json([
-                'wsp_mensaje'=>'El número del trámite no coincide'
-            ],400);
-        }
         //Variables proporcionadas por URL con metofo GET API5
         $Datos= Http::get('https://apis.roo.gob.mx/repositorio/api_requisitoslandingpage.php?ews_curp='.$request->ews_curp_sw.'&ews_token=UA6H5auaxtDo$xcIMz3aYvpntoeCJC7GQ8abH6cUWYS7tvczbBTY0feM7J4C2Shvlq8bBCJC7GQ8abH6cUWYS7tvczbBTY0feM7J4C2Shvlq8bBcNNbYk5YQycBnx_BJXqADLz2Nk0xEWUZzZNMKK4*d&ews_nid_tramite=115856&=')['wsp_acreditado'];
         //Validación de documentos rquisitos completos
