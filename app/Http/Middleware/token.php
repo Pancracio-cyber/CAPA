@@ -23,7 +23,7 @@ class token
           }
       
           if ($request->has("ews_token")) {
-            $api_key = "fnPqT5xQEi5Vcb9wKwbCf65c3BjVGyBB";
+            $api_key = env('API_KEY', 'Error');
             if ($request->input("ews_token") != $api_key) {
               return response()->json([
                 'wsp_mensaje' => 'TOKEN Inválido o Inexistente',
