@@ -17,9 +17,11 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->post('/user', function (Request $request) {
     return $request->user();
 });
+Route::post('prueba',"SolicitudController@prueba");
 Route::group(["middleware" => "apikey.validate"], function () {
     Route::post('/solicitudes','SolicitudController@store');
 });
+
 Route::get('/pdf','PDFController@PDF')->name('PDF');
 
 Route::post('/ciudadanos','CiudanoController@store');

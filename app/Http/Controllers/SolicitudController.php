@@ -19,7 +19,11 @@ class SolicitudController extends Controller
     {
         return Solicitud::all();
     }
+public function prueba(SolicitudRequest $request){
+    return $request->all();
+}
 
+    
     /**
      * Store a newly created resource in storage.
      *
