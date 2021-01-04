@@ -56,11 +56,11 @@ class Handler extends ExceptionHandler
             $errores=$exception->validator->getMessageBag();
             $jsonErrores=json_encode($errores);
             $jsonErrores=json_decode($jsonErrores,true);
-            $mensaje["ews_mensaje"]="";
+            $mensaje["wsp_mensaje"]="";
             foreach ($jsonErrores as $key => $value) {
-                    $mensaje["ews_mensaje"]=  $mensaje["ews_mensaje"] .",".$value[0];
+                    $mensaje["wsp_mensaje"]=  $mensaje["wsp_mensaje"] .",".$value[0];
             }
-            $mensaje["ews_mensaje"]=substr($mensaje["ews_mensaje"],1);
+            $mensaje["wsp_mensaje"]=substr($mensaje["wsp_mensaje"],1);
             return response()->json( $mensaje, 400);
         }
         return parent::render($request, $exception);

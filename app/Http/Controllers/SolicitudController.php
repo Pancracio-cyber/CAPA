@@ -54,7 +54,7 @@ public function prueba(SolicitudRequest $request){
         $Direccion = 'Número Exterior: '.$NumExterior.' Número Interior: '.$NumInterior.' Manzana: '.$Manzana.' Lote: '.$Lote.' Localidad: '.$Localidad;
         $Colonia = Http::get('https://apis.roo.gob.mx/repositorio/detalledatosdocumento.php?ews_id_documento=116090&ews_codigo=0009&ews_curp='.$request->ews_curp.'&ews_token=02e74f10e0327ad868d138f2b4fdd6f090eb8d5ef4ebbd9d00cdd93f40aee8a95092ce6456740f6d39a6ee78d557358de069ea4c9c233d36ff9c7f329bc08ff1dba132f6ab6a3e3d17a8d59e82105f4c')['wsp_colonia'];*/
         //Creación de la varible no_solicutd_api para que sea auto incrementable 
-        $no_solicitud_api = Solicitud::count();
+        $no_solicitud_api = (Solicitud::count())+1;
         //Creación de una nueva solicitud
         $solicitud = new Solicitud();
         /*Los datos fijos pertenecen a API-2 y API-3*/
