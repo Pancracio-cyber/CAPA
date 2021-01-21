@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Solicitud;
 use Illuminate\Support\Facades\Validator;
 use Http;
+use GuzzleHttp\Client;
 
 class SolicitudController extends Controller
 {
@@ -32,6 +33,21 @@ public function prueba(SolicitudRequest $request){
      */
     public function store(SolicitudRequest $request)
     {
+        $client = new Client([
+            // Base URI is used with relative requests
+            'base_uri' => 'http://httpbin.org',
+            // You can set any number of default request options.
+            'timeout'  => 2.0,
+        ]);
+    
+        $response = $client->request('POST', 'http://www.capa.gob.mx/capanet/apiroo.php', [
+            'form_params' => [
+                "ews_token" => "***wsjus2389dki34***...",
+                "ews_no_contrato" => $request->ews_no_contrato,
+                "ews_id_municipio" => $request->ews_municipio_capa
+            ]
+        ]);
+        $response = json_decode((string) $response->getBody(), true);
         //Variables proporcionadas por URL con metofo GET API5
         $Datos= Http::get('https://apis.roo.gob.mx/repositorio/api_requisitoslandingpage.php?ews_curp='.$request->ews_curp_sw.'&ews_token=UA6H5auaxtDo$xcIMz3aYvpntoeCJC7GQ8abH6cUWYS7tvczbBTY0feM7J4C2Shvlq8bBCJC7GQ8abH6cUWYS7tvczbBTY0feM7J4C2Shvlq8bBcNNbYk5YQycBnx_BJXqADLz2Nk0xEWUZzZNMKK4*d&ews_nid_tramite=115856&=')['wsp_acreditado'];
         //Validación de documentos rquisitos completos
@@ -41,7 +57,7 @@ public function prueba(SolicitudRequest $request){
                 'wsp_mensaje' =>'Complete sus datos requisito'
             ],400);
         }
-        //Variables proporcionadas por URL con metofo GETAPI4
+        //Variables proporcionadas por URL con metodo GETAPI4
         /*$NumExterior= Http::get('https://apis.roo.gob.mx/repositorio/detalledatosdocumento.php?ews_id_documento=116090&ews_codigo=0009&ews_curp='.$request->ews_curp.'&ews_token=02e74f10e0327ad868d138f2b4fdd6f090eb8d5ef4ebbd9d00cdd93f40aee8a95092ce6456740f6d39a6ee78d557358de069ea4c9c233d36ff9c7f329bc08ff1dba132f6ab6a3e3d17a8d59e82105f4c')['wsp_numero_exterior'];
         if($NumExterior)
         {
@@ -82,15 +98,15 @@ public function prueba(SolicitudRequest $request){
         /*Consumir API de usuarios de POTYS para validar los datos del solicitante con el usuario registrdo en POTYS*/
         /*Consumir API-5 de repositorio de POTYS para conocer si el solicitante ya integro los documentos requisito*/
         /*Datos que se obtendran de la consulta de la CAPA*/
-        $solicitud->direccion = 'r201';
-        $solicitud->colonia = 'hzda';
-        $solicitud->importe = '748.50';
-        $solicitud->fechalimite = date("2020-02-23");
-        $solicitud->sector = '13';
-        $solicitud->manzana = '132';
-        $solicitud->lote = '2';
-        $solicitud->tipo_servicio = 'domestico';
-        $solicitud->no_medidor = '4502';
+        $solicitud->direccion = $response["direccion"];
+        $solicitud->colonia = $response["colonia"];
+        $solicitud->importe = $response["importe"];
+        $solicitud->fechalimite = date ( "2020-02-23" );//$response["fechalimite"] date("Y-m-d");
+        $solicitud->sector = $response["sector"];
+        $solicitud->manzana = $response["manzana"];
+        $solicitud->lote = $response["lote"];
+        $solicitud->tipo_servicio = $response["tipoServicio"];
+        $solicitud->no_medidor = $response["numeroMedidor"];
 
 
         /*$solicitud->stripe_orden_id = '6735';
@@ -130,17 +146,17 @@ public function prueba(SolicitudRequest $request){
                     '3' => (Object)
                     [
                         '0' => 'Dirección',
-                        '1' => '$Direccion'
+                        '1' => $response["direccion"]
                     ],
                     '4' => (Object)
                     [
                         '0' => 'Colonia',
-                        '1' => '$Colonia'
+                        '1' => $response["colonia"]
                     ],
                     '5' => (Object)
                     [
                         '0' => 'Importe del contrato',
-                        '1' => ''
+                        '1' => $response["importe"]
                     ],
                     '6' => (Object)
                     [
@@ -150,7 +166,7 @@ public function prueba(SolicitudRequest $request){
                     '7' => (Object)
                     [
                         '0' => 'Tarifa',
-                        '1' => ''
+                        '1' => $response["tarifa"]
                     ]
                 ] 
             ],

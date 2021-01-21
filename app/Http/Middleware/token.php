@@ -25,12 +25,12 @@ class token
       
           if ($request->has("ews_token")) {
             $api_key = Token2::all()->first();
-            if ($request->input("ews_token") != $api_key["token"]) {
+            if ($request->input("ews_token") != $api_key["token"]) 
+            {
               return response()->json([
                 'wsp_mensaje' => 'TOKEN Inválido o Inexistente',
               ], 403);
             }
           }
-        return $next($request);
-    }
-}
+        }
+      }

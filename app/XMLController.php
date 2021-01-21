@@ -27,8 +27,8 @@ class XMLController extends Controller
         $solicitud["stripe_digitos"]=$solicitud2["ews_stripe_digitos"];
         $solicitud["stripe_estado"]=$solicitud2["ews_stripe_estado"];
         $solicitud["stripe_red"]=$solicitud2["ews_stripe_red"];
-        $xml_ruta="archivo".strval($solicitud2["ews_no_solicitud"])."s.xml";
-        $solicitud["xml_url"]= "http://geoalex.site/apiscapa/apiscapa/".$xml_ruta;
+        $xml_ruta="archivo2s.xml";
+        $solicitud["xml_url"]= "http://127.0.0.1:8000/".$xml_ruta;
         $solicitud->save();
 
       
@@ -119,7 +119,7 @@ class XMLController extends Controller
         $respuestaJson["wsp_no_solicitud_api"]=$solicitud["no_solicitud_api"];
         $respuestaJson["wsp_fecha_generacion"]= date("Y-m-d");
         $respuestaJson["wsp_hora_generacion"]= date("H:i:s", time());
-        $respuestaJson["wsp_url_xml"]= "http://geoalex.site/apiscapa/apiscapa/".$xml_ruta;
+        $respuestaJson["wsp_url_xml"]= "http://127.0.0.1:8000/".$xml_ruta;
         return response()->json($respuestaJson,200);
     }
 }

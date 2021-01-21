@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Tramite>
+  <Documento>
+    <no_solicitud>1</no_solicitud>
+    <fecha_solicitud>2020-11-23</fecha_solicitud>
+    <hora_solicitud>04:00:00</hora_solicitud>
+    <id_electronico>123123</id_electronico>
+    <referencia_pago>312312</referencia_pago>
+    <fecha_pago>2020-12-01</fecha_pago>
+    <hora_pago>123123</hora_pago>
+    <stripe_orden_id>23453234</stripe_orden_id>
+    <stripe_creado>343</stripe_creado>
+    <stripe_mensaje>324234</stripe_mensaje>
+    <stripe_tipo>23432432</stripe_tipo>
+    <stripe_digitos>32423432</stripe_digitos>
+    <stripe_red>23423</stripe_red>
+    <stripe_estado>5233</stripe_estado>
+    <curp>MOCE990815RHHRTCCC</curp>
+    <nombre>Ernesto</nombre>
+    <apellido_paterno>Moreno</apellido_paterno>
+    <apellido_materno>Chin</apellido_materno>
+    <direccion>r201</direccion>
+    <colonia>hzda</colonia>
+    <importe>748.50</importe>
+    <fechalimite>2020-02-23</fechalimite>
+    <sector>13</sector>
+    <manzana>132</manzana>
+    <lote>2</lote>
+    <tipo_servicio>domestico</tipo_servicio>
+    <no_medidor>4502</no_medidor>
+  </Documento>
+  <Firma_Electronica>
+    <Hash/>
+    <Sello_Digital/>
+    <Descripcion/>
+    <Fecha_Validez/>
+  </Firma_Electronica>
+</Tramite>

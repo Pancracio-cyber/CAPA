@@ -13,14 +13,17 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+Route::post('/solicitudes','SolicitudController@store');
 
 Route::middleware('auth:api')->post('/user', function (Request $request) {
     return $request->user();
 });
 Route::post('prueba',"SolicitudController@prueba");
 Route::group(["middleware" => "apikey.validate"], function () {
-    Route::post('/solicitudes','SolicitudController@store');
+    
 });
+
+Route::post('/ciudadanos/xml',"XMLController@xml");
 
 Route::get('/pdf','PDFController@PDF')->name('PDF');
 
