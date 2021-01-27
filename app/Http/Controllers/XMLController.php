@@ -13,9 +13,11 @@ class XMLController extends Controller
       if($solicitud2["ews_token"]!==Token::first()["token"]){
         return response()->json(["wsp_mensaje"=>"TOKEN Invalido o Inexistente"]);
       }
-      $solicitud= Solicitud::where("id",$solicitud2["ews_no_solicitud"])->first();        
-        
-        
+      $solicitud= Solicitud::where("id",$solicitud2["ews_no_solicitud"])->first();
+      if(!$solicitud)
+      {
+        return response()->json(["ews_mensaje"=>"No se encontro la solicitud"],400);
+      }  
         $solicitud["id_electronico"]=$solicitud2["ews_id_electronico"];
         $solicitud["referencia_pago"]=$solicitud2["ews_referencia_pago"];
         $solicitud["fecha_pago"]=$solicitud2["ews_fecha_pago"];

@@ -25,6 +25,8 @@ Route::group(["middleware" => "apikey.validate"], function () {
 
 Route::post('/ciudadanos/xml',"XMLController@xml");
 
+Route::post('/ciudadanos/pdf',"PDFController@pdf");
+
 Route::get('/pdf','PDFController@PDF')->name('PDF');
 
 Route::post('/ciudadanos','CiudanoController@store');
