@@ -101,7 +101,10 @@ public function prueba(SolicitudRequest $request){
         $solicitud->direccion = $response["direccion"];
         $solicitud->colonia = $response["colonia"];
         $solicitud->importe = $response["importe"];
-        $solicitud->fechalimite = date ( "2020-02-23" );//$response["fechalimite"] date("Y-m-d");
+        //return $response["fechalimite"];
+        $datos = explode('/',$response["fechalimite"]);
+        $fechalimite = $datos[2]."-".$datos[1]."-".$datos[0];
+        $solicitud->fechalimite = $fechalimite;//$response["fechalimite"] date("Y-m-d");
         $solicitud->sector = $response["sector"];
         $solicitud->manzana = $response["manzana"];
         $solicitud->lote = $response["lote"];
@@ -161,7 +164,7 @@ public function prueba(SolicitudRequest $request){
                     '6' => (Object)
                     [
                         '0' => 'Fecha límite del recibo (factura)',
-                        '1' => ''
+                        '1' => $solicitud["fechalimite"]
                     ],
                     '7' => (Object)
                     [
