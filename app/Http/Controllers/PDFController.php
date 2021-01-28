@@ -51,6 +51,6 @@ class PDFController extends Controller
         $fpdf->SetFont('Courier', '', 18);
         $fpdf->Cell(0, 0, 'Este es un trabajo de PDF');
         $fpdf->Output("F","Daniel.pdf");
+        return response()->json(["wsp_url"=>"127.0.0.1:8000/Daniel.pdf"],200);
     }
 }
-
