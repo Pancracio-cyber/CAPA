@@ -8,20 +8,20 @@ use App\Token;
 use App\Solicitud;
 
 
-class PDFController extends Controller
+class PDFGenerateController extends Controller
 {
     public function pdf (Request $request) 
     {
         if($request["ews_token"]!==Token::first()["token"]){
             return response()->json(["wsp_mensaje"=>"TOKEN Invalido o Inexistente"]);
           }     
-          $solicitud= Solicitud::where("id",$request["ews_no_solicitud"])->first();
+          $solicitud= Solicitud::where("id_solicitud",$request["ews_no_solicitud"])->first();
           if(!$solicitud)
           {
             return response()->json(["ews_mensaje"=>"No se encontro la solicitud"],400);
           }
-          $fpdf= new PDF();  
-        ob_end_clean();
+            $fpdf= new PDF();  
+        //ob_end_clean();
         $fpdf->AddPage();
         $fpdf->SetFont('Courier', 'B', 18);
         $fpdf->SetTextColor(61, 135, 142);
