@@ -39,8 +39,10 @@ class CreateSolicitudesTable extends Migration
             $table->string('sector')->nullable();
             $table->string('manzana')->nullable();
             $table->string('lote')->nullable();
+            $table->string('tarifa')->nullable();
             $table->string('tipo_servicio')->nullable();
             $table->string('no_medidor')->nullable();
+            $table->string('diametroToma')->nullable();
             $table->string('stripe_orden_id')->nullable();
             $table->string('stripe_creado')->nullable();
             $table->string('stripe_mensaje')->nullable();
@@ -52,6 +54,8 @@ class CreateSolicitudesTable extends Migration
             $table->string('no_consulta')->nullable();
             $table->integer('no_contrato')->nullable();
             $table->integer('id_municipio')->nullable();
+            $table->string('calle1')->nullable();
+            $table->string('calle2')->nullable();
             $table->string('id_firmante')->nullable();
             $table->string('id_sello')->nullable();
             $table->timestamps();

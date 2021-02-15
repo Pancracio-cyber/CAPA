@@ -8,6 +8,7 @@ use App\Solicitud;
 use Illuminate\Support\Facades\Validator;
 use Http;
 use GuzzleHttp\Client;
+use Illuminate\Support\Str;
 
 class SolicitudController extends Controller
 {
@@ -48,27 +49,6 @@ public function prueba(SolicitudRequest $request){
             ]
         ]);
         $response = json_decode((string) $response->getBody(), true);
-        //Variables proporcionadas por URL con metofo GET API5
-        $Datos= Http::get('https://apis.roo.gob.mx/repositorio/api_requisitoslandingpage.php?ews_curp='.$request->ews_curp_sw.'&ews_token=UA6H5auaxtDo$xcIMz3aYvpntoeCJC7GQ8abH6cUWYS7tvczbBTY0feM7J4C2Shvlq8bBCJC7GQ8abH6cUWYS7tvczbBTY0feM7J4C2Shvlq8bBcNNbYk5YQycBnx_BJXqADLz2Nk0xEWUZzZNMKK4*d&ews_nid_tramite=115856&=')['wsp_acreditado'];
-        //Validación de documentos rquisitos completos
-        if(!$Datos)
-        {
-            return response()->json([            
-                'wsp_mensaje' =>'Complete sus datos requisito'
-            ],400);
-        }
-        //Variables proporcionadas por URL con metodo GETAPI4
-        /*$NumExterior= Http::get('https://apis.roo.gob.mx/repositorio/detalledatosdocumento.php?ews_id_documento=116090&ews_codigo=0009&ews_curp='.$request->ews_curp.'&ews_token=02e74f10e0327ad868d138f2b4fdd6f090eb8d5ef4ebbd9d00cdd93f40aee8a95092ce6456740f6d39a6ee78d557358de069ea4c9c233d36ff9c7f329bc08ff1dba132f6ab6a3e3d17a8d59e82105f4c')['wsp_numero_exterior'];
-        if($NumExterior)
-        {
-
-        }
-        $NumInterior= Http::get('https://apis.roo.gob.mx/repositorio/detalledatosdocumento.php?ews_id_documento=116090&ews_codigo=0009&ews_curp='.$request->ews_curp.'&ews_token=02e74f10e0327ad868d138f2b4fdd6f090eb8d5ef4ebbd9d00cdd93f40aee8a95092ce6456740f6d39a6ee78d557358de069ea4c9c233d36ff9c7f329bc08ff1dba132f6ab6a3e3d17a8d59e82105f4c')['wsp_numero_interior'];
-        $Manzana= Http::get('https://apis.roo.gob.mx/repositorio/detalledatosdocumento.php?ews_id_documento=116090&ews_codigo=0009&ews_curp='.$request->ews_curp.'&ews_token=02e74f10e0327ad868d138f2b4fdd6f090eb8d5ef4ebbd9d00cdd93f40aee8a95092ce6456740f6d39a6ee78d557358de069ea4c9c233d36ff9c7f329bc08ff1dba132f6ab6a3e3d17a8d59e82105f4c')['wsp_manzana'];
-        $Lote= Http::get('https://apis.roo.gob.mx/repositorio/detalledatosdocumento.php?ews_id_documento=116090&ews_codigo=0009&ews_curp='.$request->ews_curp.'&ews_token=02e74f10e0327ad868d138f2b4fdd6f090eb8d5ef4ebbd9d00cdd93f40aee8a95092ce6456740f6d39a6ee78d557358de069ea4c9c233d36ff9c7f329bc08ff1dba132f6ab6a3e3d17a8d59e82105f4c')['wsp_lote'];
-        $Localidad= Http::get('https://apis.roo.gob.mx/repositorio/detalledatosdocumento.php?ews_id_documento=116090&ews_codigo=0009&ews_curp='.$request->ews_curp.'&ews_token=02e74f10e0327ad868d138f2b4fdd6f090eb8d5ef4ebbd9d00cdd93f40aee8a95092ce6456740f6d39a6ee78d557358de069ea4c9c233d36ff9c7f329bc08ff1dba132f6ab6a3e3d17a8d59e82105f4c')['wsp_localidad'];
-        $Direccion = 'Número Exterior: '.$NumExterior.' Número Interior: '.$NumInterior.' Manzana: '.$Manzana.' Lote: '.$Lote.' Localidad: '.$Localidad;
-        $Colonia = Http::get('https://apis.roo.gob.mx/repositorio/detalledatosdocumento.php?ews_id_documento=116090&ews_codigo=0009&ews_curp='.$request->ews_curp.'&ews_token=02e74f10e0327ad868d138f2b4fdd6f090eb8d5ef4ebbd9d00cdd93f40aee8a95092ce6456740f6d39a6ee78d557358de069ea4c9c233d36ff9c7f329bc08ff1dba132f6ab6a3e3d17a8d59e82105f4c')['wsp_colonia'];*/
         //Creación de la varible no_solicutd_api para que sea auto incrementable 
         $no_solicitud_api = (Solicitud::count())+1;
         //Creación de una nueva solicitud
@@ -94,38 +74,75 @@ public function prueba(SolicitudRequest $request){
         $solicitud->apellido_materno = $request->ews_apellido_materno_sw;
         $solicitud->no_contrato = $request->ews_no_contrato;
         $solicitud->id_municipio = $request->ews_municipio_capa;
-        
+        $municipio="";
+        switch ($request->ews_municipio_capa) {
+        case 1:
+            $municipio="Cozumel";
+            break;
+        case 2:
+            $municipio="Felipe Carrillo Puerto";
+            break;
+        case 3:
+            $municipio="Lázaro Cárdenas";
+            break;
+        case 4:
+            $municipio="José María Morelos";
+            break;
+        case 5:
+            $municipio="Othón P. Blanco";
+            break;
+        case 7:
+            $municipio="Tulum";
+            break;
+        case 8:
+        $municipio="Bacalar";
+        break;
+        default:
+        # code...
+        break;
+        }   
         /*Consumir API de usuarios de POTYS para validar los datos del solicitante con el usuario registrdo en POTYS*/
         /*Consumir API-5 de repositorio de POTYS para conocer si el solicitante ya integro los documentos requisito*/
         /*Datos que se obtendran de la consulta de la CAPA*/
-        $solicitud->direccion = $response["direccion"];
-        $solicitud->colonia = $response["colonia"];
+        
+        $string1 =Str::of($response["direccion"])->replace('\\\"', '');
+        $string2 =(String)Str::of($string1)->replace('"', '');
+        $solicitud->direccion = $string2;
         $solicitud->importe = $response["importe"];
+        $string3 =Str::of($response["colonia"])->replace('\\\"', '');
+        $string4 =(String)Str::of($string3)->replace('"', '');
+        $solicitud->colonia = $string4;
         //return $response["fechalimite"];
         $datos = explode('/',$response["fechalimite"]);
         $fechalimite = $datos[2]."-".$datos[1]."-".$datos[0];
-        $solicitud->fechalimite = $fechalimite;//$response["fechalimite"] date("Y-m-d");
+        $solicitud->fechalimite = $fechalimite;
         $solicitud->sector = $response["sector"];
         $solicitud->manzana = $response["manzana"];
         $solicitud->lote = $response["lote"];
-        $solicitud->tipo_servicio = $response["tipoServicio"];
-        $solicitud->no_medidor = $response["numeroMedidor"];
-
-
-        /*$solicitud->stripe_orden_id = '6735';
-        $solicitud->stripe_creado = '1583253990';
-        $solicitud->stripe_mensaje = "Payment_complete";
-        $solicitud->stripe_tipo = "authorized";
-        $solicitud->stripe_digitos = '8001';
-        $solicitud->stripe_red = "visa";
-        $solicitud->stripe_estado = "succeeded";
-        $solicitud->xml_url = "localhost";*/
+        $string5 = $response["tipoServicio"];
+        $string6 =(String)Str::of($string5)->replace(' ', '');
+        $solicitud->tipo_servicio = $string6;
+        $string7 = $response["numeroMedidor"];
+        $string8 =(String)Str::of($string7)->replace(' ', '');
+        $solicitud->no_medidor = $string8;
+        $string9 = $response["diametroToma"];
+        $string10 =(String)Str::of($string9)->replace(' ', '');
+        $string11 =(String)Str::of($string10)->replace('"', '');
+        $solicitud->diametroToma = $string11;
+        $string12 =Str::of($response["tarifa"])->replace('\\\"', '');
+        $string13 =(String)Str::of($string12)->replace('"', '');
+        $string14 =(String)Str::of($string13)->replace(' ', '');
+        $solicitud->tarifa= $string14;
+        $string15 =(String)Str::of($response["calle1"])->replace(' ', '');
+        $solicitud->calle1=$string15;
+        $string16 =(String)Str::of($response["calle2"])->replace(' ', '');
+        $solicitud->calle2=$string16;
         //Se almacena la slicitud
         $solicitud->save();
         //Repuesta en formato json
         return response()->json([
             'wsp_mensaje' => 'Datos del contrato encontrados exitosamente',
-            'wsp_no_solicitud' => '2020-0000000001',
+            'wsp_no_solicitud' => $request->ews_no_solicitud,
             'wsp_no_solicitud_api' => $no_solicitud_api,
             'wsp_nivel' => '2',
             'wsp_datos'=> (Object)
@@ -144,32 +161,67 @@ public function prueba(SolicitudRequest $request){
                     '2' => (Object)
                     [
                         '0' => 'Municipio',
-                        '1' => $request->ews_municipio_capa
+                        '1' => $municipio
                     ],
                     '3' => (Object)
                     [
-                        '0' => 'Dirección',
-                        '1' => $response["direccion"]
+                        '0' => 'Primer No. de calle',
+                        '1' => $string15
                     ],
                     '4' => (Object)
                     [
-                        '0' => 'Colonia',
-                        '1' => $response["colonia"]
+                        '0' => 'Segundo No. de calle',
+                        '1' => $string16
                     ],
                     '5' => (Object)
+                    [
+                        '0' => 'Dirección',
+                        '1' => $string2
+                    ],
+                    '6' => (Object)
+                    [
+                        '0' => 'Colonia',
+                        '1' => $string4
+                    ],
+                    '7' => (Object)
                     [
                         '0' => 'Importe del contrato',
                         '1' => $response["importe"]
                     ],
-                    '6' => (Object)
+                    '8' => (Object)
                     [
                         '0' => 'Fecha límite del recibo (factura)',
                         '1' => $solicitud["fechalimite"]
                     ],
-                    '7' => (Object)
+                    '9' => (Object)
+                    [
+                        '0' => 'Sector',
+                        '1' => $solicitud["sector"]
+                    ],
+                    '10' => (Object)
+                    [
+                        '0' => 'Manzana',
+                        '1' => $solicitud["manzana"]
+                    ],
+                    '11' => (Object)
+                    [
+                        '0' => 'Lote',
+                        '1' => $solicitud["lote"]
+                    ],
+                    '12' => (Object)
+                    [
+                        '0' => 'Tipo de servicio',
+                        '1' => $string6
+                    ],
+                    '13' => (Object)
+                    [
+                        '0' => 'Número de medidor',
+                        '1' => $string8
+                    ],
+                    '14' => (Object)
                     [
                         '0' => 'Tarifa',
-                        '1' => $response["tarifa"]
+                        '1' => $string14
                     ]
                 ] 
             ],
