@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Codedge\Fpdf\Fpdf\Fpdf as PDF;
 use App\Token;
 use App\Solicitud;
-
+use App\Firmante_pdf;
 
 class PDFGenerateController extends Controller
 {
@@ -87,8 +87,53 @@ class PDFGenerateController extends Controller
               # code...
               break;
               }
+                $longitudtipo_servicio= strlen($solicitud["tipo_servicio"]);
+                $longitudDeseada=23;
+                $cantidadEspaciosEnBlanco=$longitudDeseada-$longitudtipo_servicio;
+                $espaciosEnBlanco="";
+                    if($cantidadEspaciosEnBlanco<=0)
+                    {
+                        $cantidadEspaciosEnBlanco=1;
+                    }
+                    for ($i=0; $i < $cantidadEspaciosEnBlanco ; $i++) 
+                    { 
+                        $espaciosEnBlanco=$espaciosEnBlanco . " ";
+                    }
+                $tipo_servicio=$solicitud["tipo_servicio"].$espaciosEnBlanco.$solicitud["no_medidor"];
+                $longituddiametroToma= strlen($solicitud["diametroToma"]);
+                $longitudDeseada=23;
+                $cantidadEspaciosEnBlanco=$longitudDeseada-$longituddiametroToma;
+                $espaciosEnBlanco="";
+                    if($cantidadEspaciosEnBlanco<=0)
+                    {
+                        $cantidadEspaciosEnBlanco=1;
+                    }
+                    for ($i=0; $i < $cantidadEspaciosEnBlanco ; $i++) 
+                    { 
+                        $espaciosEnBlanco=$espaciosEnBlanco . " ";
+                    }
+                $diametroToma=$solicitud["diametroToma"].$espaciosEnBlanco.$solicitud["tarifa"];
+                $firmantepdf=Firmante_pdf::where("id",$solicitud["id_municipio"])->first();
+                $nombrefirmante=$firmantepdf["nombre_firmante"]." ".$firmantepdf["primer_apellido_firmante"]." ".$firmantepdf["segundo_apellido_firmante"];
             $fpdf= new PDF();  
-            $string = "Entre calles: ".$solicitud["calle1"]." y ".$solicitud["calle2"];
+            $calle1= $solicitud["calle1"];
+            $calle2= $solicitud["calle2"];
+            if($calle1 && $calle2)
+                {
+                    $string= "" . $calle1." y " . $calle2;
+                }else if($calle1 && !$calle2)               
+                {
+                    $string= "" . $calle1;
+                }else if(!$calle1 && $calle2)
+                {
+                    $string= "" . $calle2;
+                }else if(!$calle1 && !$calle2)
+                {
+                    $string= "";
+                }else
+                {
+                    $string= "";
+                }
             //return $solicitud;
         //ob_end_clean();
         $fpdf->AddPage();
@@ -108,17 +153,22 @@ class PDFGenerateController extends Controller
         $fpdf->ln(12);
         $fpdf->Cell(0, 0, utf8_decode($municipio));
         $fpdf->ln(12);
-        $fpdf->Cell(0, 0, utf8_decode($solicitud["tipo_servicio"]."                  ".$solicitud["no_medidor"]));
+        $fpdf->Cell(0, 0, utf8_decode($tipo_servicio));
         $fpdf->ln(12);
-        $fpdf->Cell(0, 0, utf8_decode($solicitud["diametroToma"]."                     ".$solicitud["tarifa"]));
+        $fpdf->Cell(0, 0, utf8_decode($diametroToma));
         $fpdf->ln(12);
         $fpdf->Cell(0, 0, utf8_decode($solicitud["importe"]));
         $fpdf->ln(17);
         $fpdf->Cell(15,0, "");
         $fpdf->Cell(0, 0, utf8_decode("Cozumel"."  ".date("d")."   ".$mes."  ".date("Y")));
+        $fpdf->ln(30);
+        $fpdf->SetFont('Courier', 'B', 15);
+        $fpdf->Cell(110,0, "");
+        $fpdf->Cell(0, 0, utf8_decode($nombrefirmante));
         $fpdf->AddPage();
         $fpdf->SetTextColor(0,0,0);
         $fpdf->Image('imagenes/Normas.jpeg',0,0,210);
-        return $fpdf->Output();
+        //return $fpdf->Output();
+        return $fpdf->Output("F","Daniel.pdf");
     }
 }
