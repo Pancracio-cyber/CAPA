@@ -17,7 +17,8 @@
         "laravel/framework": "^7.0",
         "laravel/tinker": "^2.0",
         "symfony/psr-http-message-bridge": "^2.0",
-        "zendframework/zend-diactoros": "^2.2"
+        "zendframework/zend-diactoros": "^2.2",
+        "simplesoftwareio/simple-qrcode": "~2"
     },
     "require-dev": {
         "facade/ignition": "^2.0",

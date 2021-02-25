@@ -7,6 +7,7 @@ use Codedge\Fpdf\Fpdf\Fpdf as PDF;
 use App\Token;
 use App\Solicitud;
 use App\Firmante_pdf;
+use SimpleSoftwareIO\QrCode\Facades\QrCode as Qr;
 
 class PDFGenerateController extends Controller
 {
@@ -114,7 +115,22 @@ class PDFGenerateController extends Controller
                     }
                 $diametroToma=$solicitud["diametroToma"].$espaciosEnBlanco.$solicitud["tarifa"];
                 $firmantepdf=Firmante_pdf::where("id",$solicitud["id_municipio"])->first();
+                $nombresolicitante = $solicitud->nombre." ".$solicitud->apellido_paterno." ".$solicitud->apellido_materno;
+                $longitud= strlen($nombresolicitante);
+                $longitudDeseada=35;
+                $cantidadEspaciosEnBlanco=$longitudDeseada-$longitud;
+                $espaciosEnBlanco="";
+                    if($cantidadEspaciosEnBlanco<=0)
+                    {
+                        $cantidadEspaciosEnBlanco=1;
+                    }
+                    for ($i=0; $i < $cantidadEspaciosEnBlanco ; $i++) 
+                    { 
+                        $espaciosEnBlanco=$espaciosEnBlanco . " ";
+                    }
                 $nombrefirmante=$firmantepdf["nombre_firmante"]." ".$firmantepdf["primer_apellido_firmante"]." ".$firmantepdf["segundo_apellido_firmante"];
+                $nombreciudadano = $nombresolicitante.$espaciosEnBlanco.$nombrefirmante;
+                Qr::format('png')->size(200)->generate('Hola Mundo', 'hola.png');
             $fpdf= new PDF();  
             $calle1= $solicitud["calle1"];
             $calle2= $solicitud["calle2"];
@@ -139,10 +155,10 @@ class PDFGenerateController extends Controller
         $fpdf->AddPage();
         $fpdf->SetFont('Courier', 'B', 18);
         $fpdf->Image('imagenes/Principal.jpeg',0,0,210);
-        $fpdf->ln(110);
-        $fpdf->Cell(110,0, "");
+        $fpdf->ln(108);
+        $fpdf->Cell(115,0, "");
         $fpdf->Cell(0, 0, utf8_decode($solicitud["no_contrato"]));
-        $fpdf->ln(14);
+        $fpdf->ln(12);
         $fpdf->Cell(0, 0, utf8_decode($solicitud["nombre"]));
         $fpdf->ln(12);
         $fpdf->Cell(0, 0, utf8_decode($solicitud["direccion"]));
@@ -150,7 +166,7 @@ class PDFGenerateController extends Controller
         $fpdf->Cell(0, 0, utf8_decode($string));
         $fpdf->ln(12);
         $fpdf->Cell(0, 0, utf8_decode($solicitud["colonia"]));
-        $fpdf->ln(12);
+        $fpdf->ln(10);
         $fpdf->Cell(0, 0, utf8_decode($municipio));
         $fpdf->ln(12);
         $fpdf->Cell(0, 0, utf8_decode($tipo_servicio));
@@ -158,13 +174,14 @@ class PDFGenerateController extends Controller
         $fpdf->Cell(0, 0, utf8_decode($diametroToma));
         $fpdf->ln(12);
         $fpdf->Cell(0, 0, utf8_decode($solicitud["importe"]));
-        $fpdf->ln(17);
+        $fpdf->ln(18);
         $fpdf->Cell(15,0, "");
-        $fpdf->Cell(0, 0, utf8_decode("Cozumel"."  ".date("d")."   ".$mes."  ".date("Y")));
+        $fpdf->Cell(0, 0, utf8_decode("Cozumel"."       ".date("d")."   ".$mes."   ".date("Y")));
         $fpdf->ln(30);
         $fpdf->SetFont('Courier', 'B', 15);
-        $fpdf->Cell(110,0, "");
-        $fpdf->Cell(0, 0, utf8_decode($nombrefirmante));
+        $fpdf->Cell(0,0,  utf8_decode($nombreciudadano));
+        $fpdf->ln(5);
+        $fpdf->Image('hola.png',20,262,35);
         $fpdf->AddPage();
         $fpdf->SetTextColor(0,0,0);
         $fpdf->Image('imagenes/Normas.jpeg',0,0,210);
