@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\SolicitudRequest;
 use Illuminate\Http\Request;
 use App\Solicitud;
+use App\Token;
 use Illuminate\Support\Facades\Validator;
 use Http;
 use GuzzleHttp\Client;
@@ -34,11 +35,15 @@ public function prueba(SolicitudRequest $request){
      */
     public function store(SolicitudRequest $request)
     {
+        if($request["ews_token"]!==Token::first()["token"])
+        {
+            return response()->json(["wsp_mensaje"=>"TOKEN Invalido o Inexistente"],403);
+        }
         $client = new Client([
             // Base URI is used with relative requests
             'base_uri' => 'http://httpbin.org',
             // You can set any number of default request options.
-            'timeout'  => 2.0,
+            'timeout'  => 10.0,
         ]);
     
         $response = $client->request('POST', 'http://www.capa.gob.mx/capanet/apiroo.php', [

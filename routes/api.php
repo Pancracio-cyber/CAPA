@@ -29,7 +29,7 @@ Route::post('/ciudadanos/xml',"XMLController@xml");
 
 Route::post('/ciudadanos/pdf2',"PDFGenerateController@pdf");
 
-Route::get('/pdf','PDFController@PDF')->name('PDF');
+Route::get('/change','ChangeBDCapaController@change')->name('change');
 
 Route::post('/ciudadanos','CiudanoController@store');
 

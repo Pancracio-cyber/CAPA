@@ -15,40 +15,14 @@ class PDFGenerateController extends Controller
     public function pdf (Request $request) 
     {
         if($request["ews_token"]!==Token::first()["token"]){
-            return response()->json(["wsp_mensaje"=>"TOKEN Invalido o Inexistente"]);
+            return response()->json(["wsp_mensaje"=>"TOKEN Invalido o Inexistente"],403);
           }     
           $solicitud= Solicitud::where("no_solicitud",$request["ews_no_solicitud"])-> join('municipios', 'solicitudes.id_municipio', '=', 'municipios.id')->first();
           //return $solicitud;
           if(!$solicitud)
           {
-            return response()->json(["wsp_mensaje"=>"No sev encontro la solicitud"],400);
+            return response()->json(["wsp_mensaje"=>"No se encontro la solicitud"],400);
           }
-          switch ($solicitud["id_municipio"]) {
-            case 1:
-                $municipio="Cozumel";
-                break;
-            case 2:
-                $municipio="Felipe Carrillo Puerto";
-                break;
-            case 3:
-                $municipio="Lázaro Cárdenas";
-                break;
-            case 4:
-                $municipio="José María Morelos";
-                break;
-            case 5:
-                $municipio="Othón P. Blanco";
-                break;
-            case 7:
-                $municipio="Tulum";
-                break;
-            case 8:
-            $municipio="Bacalar";
-            break;
-            default:
-            # code...
-            break;
-            }
             switch (date("m")) {
               case "01":
                   $mes="Enero";
@@ -179,7 +153,7 @@ class PDFGenerateController extends Controller
         $fpdf->ln(18);
         $fpdf->Cell(15,0, "");
         $fpdf->Cell(0, 0, utf8_decode($solicitud["localidad"]."       ".date("d")."   ".$mes."     ".date("Y")));
-        $fpdf->ln(30);
+        $fpdf->ln(18);
         $fpdf->SetFont('Courier', 'B', 15);
         $fpdf->Cell(0,0, utf8_decode($nombreciudadano));
         $fpdf->ln(5);
@@ -187,6 +161,8 @@ class PDFGenerateController extends Controller
         $fpdf->AddPage();
         $fpdf->SetTextColor(0,0,0);
         $fpdf->Image('imagenes/Normas.jpeg',0,0,210);
-        return $fpdf->Output();
+        $solicitud["id_estado"]=6;
+        $solicitud->save();
+        return $fpdf->Output("F","Daniel.pdf");
     }
 }
